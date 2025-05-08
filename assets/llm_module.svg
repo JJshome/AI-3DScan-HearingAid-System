@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="500" viewBox="0 0 800 500">
+  <defs>
+    <linearGradient id="llmGrad1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#6a11cb;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#2575fc;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="llmGrad2" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#ff9a9e;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#fad0c4;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="llmGrad3" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#a18cd1;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#fbc2eb;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="llmGrad4" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#84fab0;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#8fd3f4;stop-opacity:1" />
+    </linearGradient>
+    <filter id="llmShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="3" dy="3" stdDeviation="5" flood-opacity="0.2"/>
+    </filter>
+    
+    <!-- Animation styles -->
+    <style>
+      @keyframes float {
+        0% { transform: translateY(0px); }
+        50% { transform: translateY(-10px); }
+        100% { transform: translateY(0px); }
+      }
+      
+      @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+      }
+      
+      @keyframes breathe {
+        0% { transform: scale(1); opacity: 0.8; }
+        50% { transform: scale(1.05); opacity: 1; }
+        100% { transform: scale(1); opacity: 0.8; }
+      }
+      
+      @keyframes dashFlow {
+        0% { stroke-dashoffset: 1000; }
+        100% { stroke-dashoffset: 0; }
+      }
+      
+      @keyframes fadeInUp {
+        0% { opacity: 0; transform: translateY(20px); }
+        100% { opacity: 1; transform: translateY(0); }
+      }
+      
+      .float {
+        animation: float 4s ease-in-out infinite;
+      }
+      
+      .spin {
+        animation: spin 20s linear infinite;
+      }
+      
+      .breathe {
+        animation: breathe 4s ease-in-out infinite;
+      }
+      
+      .dashFlow {
+        stroke-dasharray: 8;
+        animation: dashFlow 20s linear infinite;
+      }
+      
+      .fadeInUp {
+        animation: fadeInUp 1s ease forwards;
+        opacity: 0;
+      }
+    </style>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="800" height="500" fill="#f7f9fc"/>
+  <text x="400" y="40" text-anchor="middle" font-family="Arial, sans-serif" font-size="22" font-weight="bold" fill="#333" class="fadeInUp">LLM 통합 모듈 (700)</text>
+  <text x="400" y="70" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" fill="#666" class="fadeInUp" style="animation-delay: 0.2s">대규모 언어 모델 기반 보청기 사용자 경험 향상</text>
+  
+  <!-- Center LLM Module -->
+  <circle cx="400" cy="250" r="80" fill="url(#llmGrad1)" filter="url(#llmShadow)" class="breathe"/>
+  <text x="400" y="240" text-anchor="middle" font-family="Arial, sans-serif" font-size="18" font-weight="bold" fill="white">LLM</text>
+  <text x="400" y="265" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" fill="white">GPT-4 기반</text>
+  
+  <!-- LLM Brain Visualization -->
+  <g class="spin" style="transform-origin: 400px 250px;">
+    <circle cx="400" cy="250" r="60" stroke="rgba(255,255,255,0.3)" stroke-width="1" fill="none" stroke-dasharray="5,5"/>
+    <circle cx="400" cy="250" r="50" stroke="rgba(255,255,255,0.4)" stroke-width="1" fill="none" stroke-dasharray="3,3"/>
+    <circle cx="400" cy="250" r="40" stroke="rgba(255,255,255,0.5)" stroke-width="1" fill="none" stroke-dasharray="2,2"/>
+    
+    <!-- Neural network nodes -->
+    <circle cx="370" cy="220" r="4" fill="white" opacity="0.7"/>
+    <circle cx="430" cy="220" r="4" fill="white" opacity="0.7"/>
+    <circle cx="370" cy="280" r="4" fill="white" opacity="0.7"/>
+    <circle cx="430" cy="280" r="4" fill="white" opacity="0.7"/>
+    <circle cx="400" cy="210" r="4" fill="white" opacity="0.7"/>
+    <circle cx="400" cy="290" r="4" fill="white" opacity="0.7"/>
+    <circle cx="360" cy="250" r="4" fill="white" opacity="0.7"/>
+    <circle cx="440" cy="250" r="4" fill="white" opacity="0.7"/>
+    
+    <!-- Neural connections -->
+    <line x1="370" y1="220" x2="430" y2="220" stroke="white" stroke-width="1" opacity="0.5"/>
+    <line x1="370" y1="220" x2="370" y2="280" stroke="white" stroke-width="1" opacity="0.5"/>
+    <line x1="370" y1="220" x2="400" y2="210" stroke="white" stroke-width="1" opacity="0.5"/>
+    <line x1="430" y1="220" x2="430" y2="280" stroke="white" stroke-width="1" opacity="0.5"/>
+    <line x1="430" y1="220" x2="400" y2="210" stroke="white" stroke-width="1" opacity="0.5"/>
+    <line x1="370" y1="280" x2="430" y2="280" stroke="white" stroke-width="1" opacity="0.5"/>
+    <line x1="370" y1="280" x2="400" y2="290" stroke="white" stroke-width="1" opacity="0.5"/>
+    <line x1="430" y1="280" x2="400" y2="290" stroke="white" stroke-width="1" opacity="0.5"/>
+    <line x1="360" y1="250" x2="370" y2="220" stroke="white" stroke-width="1" opacity="0.5"/>
+    <line x1="360" y1="250" x2="370" y2="280" stroke="white" stroke-width="1" opacity="0.5"/>
+    <line x1="440" y1="250" x2="430" y2="220" stroke="white" stroke-width="1" opacity="0.5"/>
+    <line x1="440" y1="250" x2="430" y2="280" stroke="white" stroke-width="1" opacity="0.5"/>
+  </g>
+  
+  <!-- Module 1: Voice Interface -->
+  <g class="fadeInUp" style="animation-delay: 0.4s">
+    <rect x="110" y="130" rx="15" ry="15" width="180" height="100" fill="url(#llmGrad2)" filter="url(#llmShadow)"/>
+    <text x="200" y="155" text-anchor="middle" font-family="Arial, sans-serif" font-size="16" font-weight="bold" fill="#333">음성 인터페이스</text>
+    <text x="200" y="180" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="#333">50+ 언어 지원</text>
+    <text x="200" y="200" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="#333">99% 명령 인식 정확도</text>
+    
+    <!-- Voice waves -->
+    <path d="M150,165 q5,-10 10,0 q5,10 10,0 q5,-10 10,0 q5,10 10,0" stroke="#333" stroke-width="2" fill="none" class="breathe"/>
+    <path d="M150,180 q5,-5 10,0 q5,5 10,0 q5,-5 10,0 q5,5 10,0" stroke="#333" stroke-width="2" fill="none" class="breathe"/>
+  </g>
+  
+  <!-- Module 2: Translation Engine -->
+  <g class="fadeInUp" style="animation-delay: 0.6s">
+    <rect x="510" y="130" rx="15" ry="15" width="180" height="100" fill="url(#llmGrad3)" filter="url(#llmShadow)"/>
+    <text x="600" y="155" text-anchor="middle" font-family="Arial, sans-serif" font-size="16" font-weight="bold" fill="#333">번역 엔진</text>
+    <text x="600" y="180" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="#333">100+ 언어 쌍 지원</text>
+    <text x="600" y="200" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="#333">200ms 지연 시간</text>
+    
+    <!-- Language icons -->
+    <text x="550" y="190" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" fill="#333">🇰🇷</text>
+    <text x="580" y="190" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" fill="#333">🇺🇸</text>
+    <text x="610" y="190" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" fill="#333">🇯🇵</text>
+    <text x="640" y="190" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" fill="#333">🇨🇳</text>
+    <path d="M565,190 L575,190" stroke="#333" stroke-width="1" fill="none" class="dashFlow"/>
+    <path d="M595,190 L605,190" stroke="#333" stroke-width="1" fill="none" class="dashFlow"/>
+    <path d="M625,190 L635,190" stroke="#333" stroke-width="1" fill="none" class="dashFlow"/>
+  </g>
+  
+  <!-- Module 3: Personalization Engine -->
+  <g class="fadeInUp" style="animation-delay: 0.8s">
+    <rect x="110" y="320" rx="15" ry="15" width="180" height="100" fill="url(#llmGrad4)" filter="url(#llmShadow)"/>
+    <text x="200" y="345" text-anchor="middle" font-family="Arial, sans-serif" font-size="16" font-weight="bold" fill="#333">개인화 엔진</text>
+    <text x="200" y="370" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="#333">청력 변화 예측</text>
+    <text x="200" y="390" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="#333">맞춤형 조언 제공</text>
+    
+    <!-- User chart -->
+    <path d="M150,380 L150,350 L170,365 L190,345 L210,355 L230,335" stroke="#333" stroke-width="2" fill="none" class="dashFlow"/>
+    <circle cx="150" cy="350" r="3" fill="#333"/>
+    <circle cx="170" cy="365" r="3" fill="#333"/>
+    <circle cx="190" cy="345" r="3" fill="#333"/>
+    <circle cx="210" cy="355" r="3" fill="#333"/>
+    <circle cx="230" cy="335" r="3" fill="#333"/>
+  </g>
+  
+  <!-- Module 4: Environment Adaptation -->
+  <g class="fadeInUp" style="animation-delay: 1s">
+    <rect x="510" y="320" rx="15" ry="15" width="180" height="100" fill="#8bc6ec" filter="url(#llmShadow)"/>
+    <text x="600" y="345" text-anchor="middle" font-family="Arial, sans-serif" font-size="16" font-weight="bold" fill="#333">환경 적응형 설정</text>
+    <text x="600" y="370" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="#333">상황 인식 기술</text>
+    <text x="600" y="390" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="#333">자동 최적화</text>
+    
+    <!-- Environment indicators -->
+    <circle cx="550" cy="370" r="12" fill="white" stroke="#333" stroke-width="1" class="float"/>
+    <text x="550" y="374" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="#333">🏠</text>
+    
+    <circle cx="580" cy="370" r="12" fill="white" stroke="#333" stroke-width="1" class="float" style="animation-delay: 0.5s"/>
+    <text x="580" y="374" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="#333">🍽️</text>
+    
+    <circle cx="610" cy="370" r="12" fill="white" stroke="#333" stroke-width="1" class="float" style="animation-delay: 1s"/>
+    <text x="610" y="374" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="#333">🎵</text>
+    
+    <circle cx="640" cy="370" r="12" fill="white" stroke="#333" stroke-width="1" class="float" style="animation-delay: 1.5s"/>
+    <text x="640" y="374" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="#333">🚶</text>
+  </g>
+  
+  <!-- Connection lines -->
+  <path d="M290,180 C320,180 350,210 370,220" stroke="#666" stroke-width="2" stroke-dasharray="5,5" class="dashFlow"/>
+  <path d="M510,180 C480,180 450,210 430,220" stroke="#666" stroke-width="2" stroke-dasharray="5,5" class="dashFlow"/>
+  <path d="M290,370 C320,370 350,340 370,280" stroke="#666" stroke-width="2" stroke-dasharray="5,5" class="dashFlow"/>
+  <path d="M510,370 C480,370 450,340 430,280" stroke="#666" stroke-width="2" stroke-dasharray="5,5" class="dashFlow"/>
+  
+  <!-- Key Features -->
+  <g class="fadeInUp" style="animation-delay: 1.2s">
+    <rect x="300" y="430" rx="5" ry="5" width="200" height="60" fill="white" stroke="#ddd" stroke-width="1"/>
+    <text x="400" y="450" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#333">주요 기능</text>
+    <text x="400" y="475" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="#666">명령 인식 | 번역 | 맞춤 조언 | 환경 적응</text>
+  </g>
+</svg>
