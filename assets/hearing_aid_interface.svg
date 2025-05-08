@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="450" viewBox="0 0 800 450">
+  <defs>
+    <linearGradient id="interfaceGrad1" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#8e2de2;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#4a00e0;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="phoneGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#f5f7fa;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#c3cfe2;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="buttonGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#667eea;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#764ba2;stop-opacity:1" />
+    </linearGradient>
+    <filter id="interfaceShadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="2" dy="2" stdDeviation="3" flood-opacity="0.3"/>
+    </filter>
+    <clipPath id="screenClip">
+      <rect x="260" y="120" width="280" height="220" rx="5" ry="5"/>
+    </clipPath>
+  </defs>
+  
+  <rect width="800" height="450" fill="#f8f9fa"/>
+  
+  <!-- Title -->
+  <text x="400" y="40" text-anchor="middle" font-family="Arial, sans-serif" font-size="24" font-weight="bold" fill="#333">보청기 사용자 인터페이스</text>
+  <text x="400" y="70" text-anchor="middle" font-family="Arial, sans-serif" font-size="16" fill="#666">음성 명령 및 실시간 번역 기능</text>
+  
+  <!-- Smartphone mockup -->
+  <rect x="250" y="100" width="300" height="290" rx="20" ry="20" fill="#333" filter="url(#interfaceShadow)"/>
+  <rect x="260" y="120" width="280" height="220" rx="5" ry="5" fill="url(#phoneGrad)"/>
+  
+  <!-- Screen interface elements -->
+  <g clip-path="url(#screenClip)">
+    <!-- Header -->
+    <rect x="260" y="120" width="280" height="40" fill="url(#interfaceGrad1)"/>
+    <text x="400" y="145" text-anchor="middle" font-family="Arial, sans-serif" font-size="16" font-weight="bold" fill="#fff">청각 어시스턴트</text>
+    
+    <!-- Background pattern -->
+    <path d="M260,180 C320,170 340,200 400,190 C460,180 480,210 540,200 L540,340 L260,340 Z" fill="#f0f4ff" opacity="0.3"/>
+    
+    <!-- Message bubbles -->
+    <rect x="280" y="180" width="180" height="40" rx="10" ry="10" fill="#e1e6fc" filter="url(#interfaceShadow)"/>
+    <text x="370" y="203" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="#333">볼륨 좀 높여줘</text>
+    
+    <rect x="340" y="230" width="180" height="40" rx="10" ry="10" fill="#4a00e0" filter="url(#interfaceShadow)"/>
+    <text x="430" y="253" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="#fff">볼륨을 30% 높였습니다</text>
+    
+    <rect x="280" y="280" width="200" height="40" rx="10" ry="10" fill="#e1e6fc" filter="url(#interfaceShadow)"/>
+    <text x="380" y="303" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="#333">레스토랑 모드로 전환해줘</text>
+  </g>
+  
+  <!-- Phone button -->
+  <circle cx="400" cy="360" r="15" fill="#e0e0e0" stroke="#333" stroke-width="1"/>
+  
+  <!-- Features on the sides -->
+  <!-- Left side - voice commands -->
+  <g>
+    <rect x="80" y="140" width="120" height="70" rx="10" ry="10" fill="url(#buttonGrad)" filter="url(#interfaceShadow)"/>
+    <text x="140" y="165" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#fff">음성 명령</text>
+    <text x="140" y="185" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="#fff">50+ 언어 지원</text>
+    
+    <!-- Sound waves -->
+    <path d="M100,165 q3,-5 6,0 q3,5 6,0 q3,-5 6,0" stroke="#fff" stroke-width="2" fill="none"/>
+    <path d="M100,175 q3,-3 6,0 q3,3 6,0 q3,-3 6,0" stroke="#fff" stroke-width="2" fill="none"/>
+    
+    <!-- Command examples -->
+    <rect x="60" y="220" width="160" height="30" rx="15" ry="15" fill="#e1e6fc" filter="url(#interfaceShadow)"/>
+    <text x="140" y="240" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="#333">"볼륨 조절해줘"</text>
+    
+    <rect x="60" y="260" width="160" height="30" rx="15" ry="15" fill="#e1e6fc" filter="url(#interfaceShadow)"/>
+    <text x="140" y="280" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="#333">"주변 소음 줄여줘"</text>
+    
+    <rect x="60" y="300" width="160" height="30" rx="15" ry="15" fill="#e1e6fc" filter="url(#interfaceShadow)"/>
+    <text x="140" y="320" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="#333">"영어로 번역해줘"</text>
+  </g>
+  
+  <!-- Right side - Translation -->
+  <g>
+    <rect x="600" y="140" width="120" height="70" rx="10" ry="10" fill="url(#buttonGrad)" filter="url(#interfaceShadow)"/>
+    <text x="660" y="165" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#fff">실시간 번역</text>
+    <text x="660" y="185" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="#fff">200ms 지연 시간</text>
+    
+    <!-- Translation icon -->
+    <text x="620" y="175" text-anchor="middle" font-family="Arial, sans-serif" font-size="16" fill="#fff">🇰🇷</text>
+    <text x="645" y="175" text-anchor="middle" font-family="Arial, sans-serif" font-size="16" fill="#fff">↔️</text>
+    <text x="670" y="175" text-anchor="middle" font-family="Arial, sans-serif" font-size="16" fill="#fff">🇺🇸</text>
+    
+    <!-- Translation examples -->
+    <rect x="580" y="220" width="160" height="60" rx="10" ry="10" fill="#e1e6fc" filter="url(#interfaceShadow)"/>
+    <text x="660" y="240" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="#333">안녕하세요</text>
+    <line x1="620" y1="250" x2="700" y2="250" stroke="#333" stroke-width="1" stroke-dasharray="2,2"/>
+    <text x="660" y="270" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="#333">Hello</text>
+    
+    <rect x="580" y="290" width="160" height="60" rx="10" ry="10" fill="#e1e6fc" filter="url(#interfaceShadow)"/>
+    <text x="660" y="310" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="#333">메뉴 추천해 주세요</text>
+    <line x1="620" y1="320" x2="700" y2="320" stroke="#333" stroke-width="1" stroke-dasharray="2,2"/>
+    <text x="660" y="340" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="#333">Please recommend a menu</text>
+  </g>
+  
+  <!-- Bottom area - Environment adaptation -->
+  <rect x="250" y="380" width="300" height="50" rx="10" ry="10" fill="#f0f4ff" stroke="#667eea" stroke-width="2"/>
+  <text x="400" y="400" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#333">환경 적응형 모드</text>
+  <text x="400" y="420" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="#666">현재 모드: 레스토랑 (소음 감소 활성화)</text>
+  
+  <!-- Environment icons -->
+  <circle cx="290" cy="400" r="15" fill="#fff" stroke="#667eea" stroke-width="1"/>
+  <text x="290" y="405" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="#333">🏠</text>
+  
+  <circle cx="330" cy="400" r="15" fill="#fff" stroke="#667eea" stroke-width="1"/>
+  <text x="330" y="405" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="#333">🚶</text>
+  
+  <circle cx="370" cy="400" r="15" fill="#fff" stroke="#667eea" stroke-width="1"/>
+  <text x="370" y="405" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="#333">🎵</text>
+  
+  <circle cx="410" cy="400" r="15" fill="#667eea"/>
+  <text x="410" y="405" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="#fff">🍽️</text>
+  
+  <circle cx="450" cy="400" r="15" fill="#fff" stroke="#667eea" stroke-width="1"/>
+  <text x="450" y="405" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="#333">🚗</text>
+  
+  <circle cx="490" cy="400" r="15" fill="#fff" stroke="#667eea" stroke-width="1"/>
+  <text x="490" y="405" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="#333">👥</text>
+  
+  <!-- Created by tag -->
+  <text x="680" y="435" text-anchor="end" font-family="Arial, sans-serif" font-size="10" fill="#999">© 2025 AI-Enhanced 3D Scanning Hearing Aid System</text>
+</svg>
