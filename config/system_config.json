@@ -1,0 +1,464 @@
+{
+  "system": {
+    "name": "AI-Enhanced 3D Scanning Hearing Aid Manufacturing System",
+    "version": "1.0.0",
+    "environment": "production",
+    "data_directory": "./data",
+    "log_directory": "./logs",
+    "health_check_interval_seconds": 30,
+    "job_polling_interval_seconds": 1,
+    "max_concurrent_jobs": 10,
+    "debug_mode": false
+  },
+  "modules": {
+    "scanning": {
+      "scanner_type": "oct",
+      "calibrate_on_start": true,
+      "default_resolution": "high",
+      "default_scan_mode": "full",
+      "data_directory": "./data/scans",
+      "minimum_quality_score": 75,
+      "oct_scanner": {
+        "device_id": "OCT-001",
+        "wavelength_nm": 840,
+        "axial_resolution_um": 5,
+        "lateral_resolution_um": 15,
+        "scan_depth_mm": 7,
+        "max_scan_area_mm": 25,
+        "port": "/dev/ttyUSB0",
+        "timeout_seconds": 30
+      },
+      "lidar_scanner": {
+        "device_id": "LIDAR-001",
+        "point_density": "high",
+        "scan_range_mm": 100,
+        "accuracy_um": 50,
+        "port": "/dev/ttyUSB1",
+        "timeout_seconds": 30
+      },
+      "photogrammetry": {
+        "device_id": "PHOTO-001",
+        "camera_count": 8,
+        "resolution": "4K",
+        "image_format": "png",
+        "camera_prefix": "CAMERA-",
+        "timeout_seconds": 30
+      },
+      "processing": {
+        "noise_filter_strength": 0.7,
+        "outlier_removal_threshold": 2.0,
+        "smoothing_factor": 0.3,
+        "enable_gpu_acceleration": true
+      },
+      "mesh_generation": {
+        "method": "poisson",
+        "resolution": "high",
+        "smoothing_iterations": 3,
+        "hole_filling": true,
+        "enable_gpu_acceleration": true
+      },
+      "feature_detection": {
+        "ear_canal_detection_sensitivity": 0.8,
+        "concha_detection_sensitivity": 0.8,
+        "anatomical_model": "standard",
+        "minimum_feature_confidence": 0.7
+      },
+      "quality_analysis": {
+        "min_point_density": 100,
+        "max_hole_size_mm": 0.5,
+        "surface_smoothness_factor": 0.8,
+        "anatomical_coverage_threshold": 0.9
+      },
+      "standalone": {
+        "simulation_mode": true,
+        "sample_data_directory": "./sample_data/scans"
+      }
+    },
+    "design": {
+      "ai_model_path": "./models/design_ai_model",
+      "template_directory": "./data/templates",
+      "output_directory": "./data/designs",
+      "default_parameters": {
+        "shell_thickness_mm": 0.8,
+        "vent_diameter_mm": 1.2,
+        "safety_factor": 1.2,
+        "smoothing_iterations": 3
+      },
+      "optimization": {
+        "enable_gpu_acceleration": true,
+        "max_iterations": 200,
+        "convergence_threshold": 0.001,
+        "population_size": 50
+      },
+      "feature_constraints": {
+        "min_canal_diameter_mm": 3.0,
+        "max_canal_length_mm": 25.0,
+        "min_wall_thickness_mm": 0.5,
+        "max_curvature_radius_mm": 0.3
+      },
+      "component_placement": {
+        "speaker_clearance_mm": 0.5,
+        "microphone_positioning": "optimal",
+        "battery_clearance_mm": 0.2,
+        "circuit_board_strategy": "compact"
+      },
+      "standalone": {
+        "simulation_mode": true,
+        "sample_data_directory": "./sample_data/designs"
+      }
+    },
+    "printing": {
+      "printer_type": "sla",
+      "calibrate_on_start": true,
+      "material_profile": "biocompatible_resin",
+      "output_directory": "./data/prints",
+      "quality_control_enabled": true,
+      "sla_printer": {
+        "device_id": "SLA-001",
+        "layer_thickness_um": 25,
+        "xy_resolution_um": 50,
+        "build_volume_mm": [100, 100, 120],
+        "port": "/dev/ttyUSB2",
+        "timeout_seconds": 60
+      },
+      "fdm_printer": {
+        "device_id": "FDM-001",
+        "nozzle_diameter_mm": 0.2,
+        "layer_height_mm": 0.05,
+        "build_volume_mm": [200, 200, 180],
+        "port": "/dev/ttyUSB3",
+        "timeout_seconds": 60
+      },
+      "mjf_printer": {
+        "device_id": "MJF-001",
+        "layer_thickness_um": 80,
+        "xy_resolution_um": 600,
+        "build_volume_mm": [300, 300, 300],
+        "ip_address": "192.168.1.101",
+        "timeout_seconds": 120
+      },
+      "materials": {
+        "biocompatible_resin": {
+          "name": "BioResin 1000",
+          "type": "photopolymer",
+          "color": "clear",
+          "shore_hardness": "75D",
+          "biocompatibility": "ISO 10993-5"
+        },
+        "flexible_resin": {
+          "name": "FlexResin 500",
+          "type": "photopolymer",
+          "color": "clear",
+          "shore_hardness": "50A",
+          "biocompatibility": "ISO 10993-5"
+        },
+        "durable_polymer": {
+          "name": "DuraPoly 2000",
+          "type": "nylon",
+          "color": "white",
+          "shore_hardness": "85D",
+          "biocompatibility": "ISO 10993-5"
+        }
+      },
+      "post_processing": {
+        "washing_enabled": true,
+        "washing_time_seconds": 300,
+        "washing_solution": "isopropyl_alcohol",
+        "curing_enabled": true,
+        "curing_time_seconds": 1200,
+        "curing_temperature_c": 60
+      },
+      "standalone": {
+        "simulation_mode": true,
+        "sample_data_directory": "./sample_data/prints"
+      }
+    },
+    "acoustic": {
+      "simulation_engine": "fem",
+      "model_directory": "./models/acoustic",
+      "output_directory": "./data/acoustics",
+      "default_analysis_range_hz": [20, 20000],
+      "fem_engine": {
+        "mesh_resolution": "high",
+        "solver_type": "time_domain",
+        "max_frequency_hz": 20000,
+        "frequency_steps": 100,
+        "enable_gpu_acceleration": true,
+        "threads": 8
+      },
+      "bem_solver": {
+        "boundary_element_size_mm": 0.5,
+        "max_frequency_hz": 20000,
+        "frequency_steps": 100,
+        "enable_gpu_acceleration": true,
+        "threads": 8
+      },
+      "optimization": {
+        "target_curve": "flat_response",
+        "max_iterations": 100,
+        "convergence_threshold": 0.05,
+        "feedback_margin_db": 10
+      },
+      "measurement": {
+        "coupler_type": "2cc",
+        "test_signal_type": "swept_sine",
+        "test_level_db_spl": 60,
+        "averaging_count": 3
+      },
+      "standalone": {
+        "simulation_mode": true,
+        "sample_data_directory": "./sample_data/acoustics"
+      }
+    },
+    "iot": {
+      "cloud_platform": "aws",
+      "data_synchronization_interval_seconds": 300,
+      "device_monitoring_interval_seconds": 60,
+      "local_data_retention_days": 30,
+      "aws_config": {
+        "region": "us-east-1",
+        "iot_endpoint": "a1b2c3d4e5f6.iot.us-east-1.amazonaws.com",
+        "iot_role_arn": "arn:aws:iam::123456789012:role/hearingaid-iot-role"
+      },
+      "sensors": {
+        "microphone": {
+          "sampling_rate_hz": 16000,
+          "bit_depth": 16,
+          "channels": 2,
+          "monitoring_enabled": true
+        },
+        "accelerometer": {
+          "sampling_rate_hz": 100,
+          "range_g": 2,
+          "axes": 3,
+          "monitoring_enabled": true
+        },
+        "temperature": {
+          "sampling_rate_hz": 1,
+          "range_c": [-10, 50],
+          "precision_c": 0.1,
+          "monitoring_enabled": true
+        }
+      },
+      "connectivity": {
+        "primary_protocol": "bluetooth_le",
+        "secondary_protocol": "wifi",
+        "data_encryption": "aes_256",
+        "retry_interval_seconds": 60,
+        "max_retries": 5
+      },
+      "alerts": {
+        "battery_low_threshold_percent": 20,
+        "temperature_high_threshold_c": 40,
+        "feedback_detection_enabled": true,
+        "fall_detection_enabled": true
+      },
+      "standalone": {
+        "simulation_mode": true,
+        "sample_data_directory": "./sample_data/iot"
+      }
+    },
+    "integration": {
+      "api_port": 8080,
+      "admin_port": 8081,
+      "secure_ports": true,
+      "event_queue_size": 1000,
+      "max_job_queue_size": 100,
+      "job_timeout_minutes": 60,
+      "status_update_interval_seconds": 10,
+      "cors_allowed_origins": ["http://localhost:3000", "https://admin.hearingaid-system.com"],
+      "authentication": {
+        "jwt_secret_key_path": "./config/jwt_secret.key",
+        "token_expiry_minutes": 60,
+        "refresh_token_expiry_days": 7,
+        "require_2fa": true
+      },
+      "database_connection": {
+        "type": "postgresql",
+        "host": "localhost",
+        "port": 5432,
+        "database": "hearingaid_system",
+        "schema": "public",
+        "max_connections": 20,
+        "connection_timeout_seconds": 5
+      },
+      "standalone": {
+        "simulation_mode": true,
+        "sample_data_directory": "./sample_data/integration"
+      }
+    },
+    "llm": {
+      "model_name": "gpt-4-turbo",
+      "api_key_path": "./config/llm_api.key",
+      "temperature": 0.7,
+      "max_tokens": 1000,
+      "system_prompt_path": "./config/system_prompt.txt",
+      "cache_enabled": true,
+      "cache_ttl_minutes": 60,
+      "models": {
+        "gpt-4-turbo": {
+          "provider": "openai",
+          "context_window": 8192,
+          "max_output_tokens": 4096,
+          "cost_per_1k_input_tokens": 0.01,
+          "cost_per_1k_output_tokens": 0.03
+        },
+        "llama-3-70b": {
+          "provider": "local",
+          "model_path": "./models/llama-3-70b",
+          "context_window": 8192,
+          "max_output_tokens": 4096,
+          "quantization": "4bit"
+        },
+        "claude-3-opus": {
+          "provider": "anthropic",
+          "context_window": 100000,
+          "max_output_tokens": 4096,
+          "cost_per_1k_input_tokens": 0.015,
+          "cost_per_1k_output_tokens": 0.075
+        }
+      },
+      "speech_to_text": {
+        "model": "whisper-large-v3",
+        "language": "auto",
+        "sample_rate": 16000,
+        "enable_gpu_acceleration": true
+      },
+      "text_to_speech": {
+        "model": "eleven-labs-premium",
+        "voice_id": "josh",
+        "speaking_rate": 1.0,
+        "pitch": 0.0
+      },
+      "standalone": {
+        "simulation_mode": true,
+        "sample_data_directory": "./sample_data/llm"
+      }
+    },
+    "fitting": {
+      "interface_port": 8090,
+      "secure_interface": true,
+      "real_ear_measurement_enabled": true,
+      "acclimatization_enabled": true,
+      "fitting_protocol": "nal-nl2",
+      "verification_protocol": "speech_mapping",
+      "fitting_hardware": {
+        "programming_interface": "bluetooth_le",
+        "wireless_programmer_id": "PROG-001",
+        "max_devices": 2,
+        "timeout_seconds": 30
+      },
+      "measurement_hardware": {
+        "device_id": "REM-001",
+        "probe_tube_compensation_enabled": true,
+        "reference_microphone_enabled": true,
+        "calibration_interval_hours": 24
+      },
+      "simulation_environments": {
+        "restaurant": {
+          "background_level_db": 65,
+          "reverb_time_seconds": 0.8,
+          "speech_level_db": 70,
+          "speech_to_noise_ratio_db": 5
+        },
+        "traffic": {
+          "background_level_db": 75,
+          "reverb_time_seconds": 0.2,
+          "speech_level_db": 75,
+          "speech_to_noise_ratio_db": 0
+        },
+        "quiet_room": {
+          "background_level_db": 40,
+          "reverb_time_seconds": 0.5,
+          "speech_level_db": 60,
+          "speech_to_noise_ratio_db": 20
+        },
+        "music": {
+          "type": "classical",
+          "level_db": 70,
+          "dynamic_range_db": 30,
+          "reverb_time_seconds": 1.2
+        }
+      },
+      "standalone": {
+        "simulation_mode": true,
+        "sample_data_directory": "./sample_data/fitting"
+      }
+    }
+  },
+  "database": {
+    "type": "postgresql",
+    "host": "localhost",
+    "port": 5432,
+    "database": "hearingaid_system",
+    "username_env": "DB_USERNAME",
+    "password_env": "DB_PASSWORD",
+    "max_connections": 20,
+    "connection_timeout_seconds": 5,
+    "ssl_enabled": true,
+    "ssl_verify": true,
+    "ssl_ca_cert_path": "./config/db_ca.crt",
+    "pool_size": 10,
+    "idle_timeout_seconds": 300,
+    "migrations_path": "./database/migrations",
+    "backup": {
+      "enabled": true,
+      "interval_hours": 24,
+      "retention_days": 30,
+      "storage_path": "./backups"
+    }
+  },
+  "network": {
+    "http_port": 8080,
+    "https_port": 8443,
+    "websocket_port": 8090,
+    "ssl_enabled": true,
+    "ssl_cert_path": "./config/server.crt",
+    "ssl_key_path": "./config/server.key",
+    "cors_enabled": true,
+    "cors_allowed_origins": ["http://localhost:3000", "https://admin.hearingaid-system.com"],
+    "proxy_enabled": false,
+    "proxy_host": "",
+    "proxy_port": 0,
+    "connection_timeout_seconds": 30,
+    "request_timeout_seconds": 60,
+    "max_upload_size_mb": 100
+  },
+  "security": {
+    "authentication": {
+      "method": "jwt",
+      "jwt_secret_key_path": "./config/jwt_secret.key",
+      "token_expiry_minutes": 60,
+      "refresh_token_expiry_days": 7,
+      "require_2fa": true,
+      "2fa_method": "totp",
+      "failed_login_attempts": 5,
+      "lockout_duration_minutes": 15
+    },
+    "authorization": {
+      "role_definitions_path": "./config/roles.json",
+      "default_role": "user",
+      "admin_role": "admin",
+      "permission_check_enabled": true
+    },
+    "encryption": {
+      "algorithm": "AES-256-GCM",
+      "key_rotation_days": 90,
+      "key_storage_path": "./config/encryption_keys",
+      "data_at_rest_encryption": true,
+      "pii_encryption": true
+    },
+    "audit": {
+      "enabled": true,
+      "log_path": "./logs/audit",
+      "retention_days": 365,
+      "critical_events": [
+        "login_failure",
+        "permission_violation",
+        "config_change",
+        "user_creation",
+        "role_change"
+      ]
+    }
+  }
+}
