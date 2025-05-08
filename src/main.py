@@ -1,134 +1,287 @@
-#!/usr/bin/env python3
 """
-Main entry point for the AI-Enhanced 3D Scanning Hearing Aid Manufacturing System.
-This script initializes and starts all system modules, establishing the integration
-control system as the central coordination hub.
-
-Author: AI-Enhanced 3D Scanning Hearing Aid System Team
-Date: May 8, 2025
+Main entry point for the AI-Enhanced 3D Scanning Hearing Aid Manufacturing System
 """
-
+import argparse
+import logging
 import os
 import sys
-import logging
-import argparse
-import json
 import time
-from datetime import datetime
+from typing import Dict, Any, List, Optional
 
-# Add source directory to path
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from . import __version__
+from .hardware import Scanner3DDriver, HighResolutionScanner
+from .ai import EarScanModel, PointCloudProcessor
+from .config.settings import SYSTEM_CONFIG, SCANNER_CONFIG
+from .utils.exceptions import HardwareConnectionError, ScanningError, ProcessingError
 
-# Import core modules
-from src.core.config import SystemConfig
-from src.core.logging_setup import setup_logging
-from src.integration_control.integration_controller import IntegrationController
-from src.integration_control.system_monitor import SystemMonitor
-from src.utils.exceptions import SystemInitializationError
+# Configure logging
+logging.basicConfig(
+    level=getattr(logging, SYSTEM_CONFIG.get('log_level', 'INFO')),
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+    filename=SYSTEM_CONFIG.get('log_file', None)
+)
 
-def parse_arguments():
-    """Parse command line arguments."""
-    parser = argparse.ArgumentParser(description='AI-Enhanced 3D Scanning Hearing Aid Manufacturing System')
-    
-    parser.add_argument('--config', type=str, default='config/system_config.json',
-                        help='Path to system configuration file')
-    
-    parser.add_argument('--log-level', type=str, choices=['DEBUG', 'INFO', 'WARNING', 'ERROR', 'CRITICAL'],
-                        default='INFO', help='Set the logging level')
-    
-    parser.add_argument('--modules', type=str, nargs='+',
-                        choices=['scanning', 'design', 'printing', 'acoustic', 'iot', 'llm', 'fitting', 'all'],
-                        default=['all'], help='Modules to initialize')
-    
-    parser.add_argument('--standalone', action='store_true',
-                        help='Run in standalone mode (no external connections)')
-    
-    return parser.parse_args()
+logger = logging.getLogger(__name__)
 
-def initialize_system(config_path, log_level, modules_to_start, standalone_mode):
-    """Initialize the system with the given configuration."""
+
+def setup_scanner(device_id: str, high_resolution: bool = False) -> Scanner3DDriver:
+    """
+    Initialize and connect to the 3D scanner
+    
+    Args:
+        device_id: Scanner device identifier
+        high_resolution: Whether to use the high-resolution scanner driver
+    
+    Returns:
+        Scanner3DDriver: Initialized and connected scanner
+    """
+    logger.info(f"Setting up {'high-resolution ' if high_resolution else ''}scanner {device_id}")
+    
+    # Create appropriate scanner instance
+    scanner_class = HighResolutionScanner if high_resolution else Scanner3DDriver
+    scanner = scanner_class(device_id)
+    
+    # Connect to the scanner
+    connected = scanner.connect()
+    
+    if not connected:
+        logger.error(f"Failed to connect to scanner {device_id}")
+        raise HardwareConnectionError(f"Could not connect to scanner {device_id}")
+    
+    logger.info(f"Scanner {device_id} connected successfully")
+    return scanner
+
+
+def perform_scan(scanner: Scanner3DDriver, 
+                scan_parameters: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
+    """
+    Perform a 3D scan of the ear and process the results
+    
+    Args:
+        scanner: Initialized scanner driver
+        scan_parameters: Optional scan parameters
+    
+    Returns:
+        Dict[str, Any]: Scan results including point cloud and metadata
+    """
+    logger.info("Starting ear scanning process")
+    
+    # Ensure scanner is calibrated
+    scanner.calibrate()
+    
+    # Perform the actual scan
+    start_time = time.time()
+    point_cloud = scanner.scan(scan_parameters)
+    scan_duration = time.time() - start_time
+    
+    # Get scanner info
+    device_info = scanner.get_device_info()
+    
+    # Prepare results
+    results = {
+        "point_cloud": point_cloud,
+        "scan_timestamp": time.time(),
+        "scan_duration_seconds": scan_duration,
+        "num_points": len(point_cloud),
+        "device_info": device_info,
+        "scan_parameters": scan_parameters or {},
+    }
+    
+    logger.info(f"Scan completed with {len(point_cloud)} points in {scan_duration:.2f} seconds")
+    
+    return results
+
+
+def process_scan_data(scan_results: Dict[str, Any]) -> Dict[str, Any]:
+    """
+    Process the scan data using AI models
+    
+    Args:
+        scan_results: Results from the scanning process
+    
+    Returns:
+        Dict[str, Any]: Processed results including hearing aid model
+    """
+    logger.info("Processing scan data with AI models")
+    
+    # Extract point cloud data
+    point_cloud = scan_results["point_cloud"]
+    
+    # Initialize the processor and model
+    processor = PointCloudProcessor()
+    model = EarScanModel()
+    
+    # Pre-process the point cloud
+    filtered_cloud = processor.filter_outliers(point_cloud)
+    
+    # Perform alignment
+    aligned_cloud, transform = processor.align_to_canonical_orientation(filtered_cloud)
+    
+    # Compute statistical features
+    cloud_features = processor.compute_point_cloud_features(aligned_cloud)
+    
+    # Process with AI model
+    model_results = model.process_scan(aligned_cloud)
+    
+    # Combine all results
+    processing_results = {
+        "original_scan": scan_results,
+        "preprocessing": {
+            "filtered_points": len(filtered_cloud),
+            "alignment_transform": transform,
+            "statistical_features": cloud_features
+        },
+        "model_results": model_results,
+        "processing_timestamp": time.time(),
+        "processing_duration_seconds": model_results["total_processing_time"],
+    }
+    
+    logger.info(f"Scan processing completed in {model_results['total_processing_time']:.2f} seconds")
+    
+    return processing_results
+
+
+def run_pipeline(device_id: str, 
+               high_resolution: bool = False,
+               scan_parameters: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
+    """
+    Run the complete scanning and processing pipeline
+    
+    Args:
+        device_id: Scanner device identifier
+        high_resolution: Whether to use high-resolution scanning
+        scan_parameters: Optional scanning parameters
+    
+    Returns:
+        Dict[str, Any]: Complete pipeline results
+    """
+    logger.info(f"Starting complete pipeline with device {device_id}")
+    start_time = time.time()
+    
     try:
-        # Set up logging
-        setup_logging(log_level)
-        logger = logging.getLogger(__name__)
-        logger.info(f"Initializing AI-Enhanced 3D Scanning Hearing Aid Manufacturing System")
+        # Setup scanner
+        scanner = setup_scanner(device_id, high_resolution)
         
-        # Load configuration
-        logger.info(f"Loading configuration from {config_path}")
-        if not os.path.exists(config_path):
-            raise SystemInitializationError(f"Configuration file not found: {config_path}")
+        # Perform scan
+        scan_results = perform_scan(scanner, scan_parameters)
         
-        config = SystemConfig(config_path)
-        if standalone_mode:
-            config.set_standalone_mode(True)
-            logger.info("System running in standalone mode")
+        # Process scan data
+        processing_results = process_scan_data(scan_results)
         
-        # Initialize integration controller
-        logger.info("Initializing Integration Control System")
-        controller = IntegrationController(config)
+        # Disconnect scanner
+        scanner.disconnect()
         
-        # Initialize system monitor
-        logger.info("Initializing System Monitor")
-        monitor = SystemMonitor(controller)
+        # Add pipeline metadata
+        pipeline_duration = time.time() - start_time
+        results = {
+            "pipeline_duration_seconds": pipeline_duration,
+            "pipeline_timestamp": time.time(),
+            "pipeline_version": __version__,
+            "status": "success",
+            "processing_results": processing_results
+        }
         
-        # Initialize modules
-        initialize_modules(controller, modules_to_start)
+        logger.info(f"Complete pipeline executed successfully in {pipeline_duration:.2f} seconds")
         
-        # Start system monitor
-        monitor.start()
+        return results
         
-        # Start integration controller
-        logger.info("Starting Integration Control System")
-        controller.start()
-        
-        return controller, monitor
-        
-    except Exception as e:
-        logger.critical(f"Failed to initialize system: {str(e)}", exc_info=True)
-        raise SystemInitializationError(f"System initialization failed: {str(e)}")
+    except (HardwareConnectionError, ScanningError, ProcessingError) as e:
+        logger.error(f"Pipeline error: {str(e)}")
+        return {
+            "pipeline_duration_seconds": time.time() - start_time,
+            "pipeline_timestamp": time.time(),
+            "pipeline_version": __version__,
+            "status": "error",
+            "error_message": str(e),
+            "error_type": e.__class__.__name__
+        }
 
-def initialize_modules(controller, modules_to_start):
-    """Initialize the specified modules."""
-    logger = logging.getLogger(__name__)
-    
-    if 'all' in modules_to_start:
-        logger.info("Initializing all modules")
-        controller.initialize_all_modules()
-    else:
-        for module in modules_to_start:
-            logger.info(f"Initializing module: {module}")
-            controller.initialize_module(module)
 
 def main():
-    """Main entry point for the system."""
-    # Parse command line arguments
-    args = parse_arguments()
+    """
+    Main entry point function when executed as a script
+    """
+    parser = argparse.ArgumentParser(
+        description="AI-Enhanced 3D Scanning Hearing Aid Manufacturing System"
+    )
     
+    parser.add_argument(
+        "--device", 
+        type=str, 
+        default="scanner01",
+        help="Scanner device ID to use"
+    )
+    
+    parser.add_argument(
+        "--high-res", 
+        action="store_true",
+        help="Use high-resolution scanning"
+    )
+    
+    parser.add_argument(
+        "--scan-mode", 
+        type=str, 
+        choices=["standard", "high_detail", "quick"],
+        default="standard",
+        help="Scanning mode to use"
+    )
+    
+    parser.add_argument(
+        "--output", 
+        type=str, 
+        help="Output file path for results (JSON)"
+    )
+    
+    parser.add_argument(
+        "--version", 
+        action="version",
+        version=f"AI-Enhanced 3D Scanning System v{__version__}"
+    )
+    
+    args = parser.parse_args()
+    
+    # Print banner
+    print(f"AI-Enhanced 3D Scanning Hearing Aid Manufacturing System v{__version__}")
+    print("=" * 80)
+    
+    # Setup scan parameters
+    scan_parameters = {
+        "scan_mode": args.scan_mode,
+        "timestamp": time.time()
+    }
+    
+    # Run the pipeline
     try:
-        # Initialize the system
-        controller, monitor = initialize_system(
-            args.config, args.log_level, args.modules, args.standalone)
+        results = run_pipeline(
+            device_id=args.device,
+            high_resolution=args.high_res,
+            scan_parameters=scan_parameters
+        )
         
-        # Keep the main thread alive
-        try:
-            while controller.is_running():
-                time.sleep(1)
-        except KeyboardInterrupt:
-            print("\nShutting down system...")
-        finally:
-            # Shutdown procedures
-            controller.stop()
-            monitor.stop()
-            logging.info("System shutdown complete")
-            
-    except SystemInitializationError as e:
-        print(f"ERROR: {str(e)}")
-        logging.critical(str(e))
-        sys.exit(1)
+        # Output results
+        if args.output:
+            import json
+            os.makedirs(os.path.dirname(os.path.abspath(args.output)), exist_ok=True)
+            with open(args.output, 'w') as f:
+                json.dump(results, f, indent=2)
+            print(f"Results saved to {args.output}")
+        
+        # Print summary
+        if results["status"] == "success":
+            print(f"Pipeline completed successfully in {results['pipeline_duration_seconds']:.2f} seconds")
+            print(f"Captured {results['processing_results']['original_scan']['num_points']} points")
+            print(f"Generated hearing aid model with volume: {results['processing_results']['model_results']['canal_measurements']['acoustic_pathway_volume']:.2f} cc")
+        else:
+            print(f"Pipeline failed: {results['error_message']}")
+            return 1
+        
+        return 0
+        
     except Exception as e:
-        print(f"UNHANDLED ERROR: {str(e)}")
-        logging.critical(f"Unhandled exception: {str(e)}", exc_info=True)
-        sys.exit(2)
+        logger.exception("Unhandled exception in main pipeline")
+        print(f"Error: {str(e)}")
+        return 1
+
 
 if __name__ == "__main__":
-    main()
+    sys.exit(main())
