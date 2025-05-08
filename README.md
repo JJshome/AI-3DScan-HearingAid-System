@@ -1,78 +1,104 @@
 # AI-Enhanced 3D Scanning Hearing Aid Manufacturing System
 
-## Project Overview
+## 개요
 
-This repository contains the implementation details for a novel rapid customized hearing aid manufacturing system that leverages artificial intelligence, 3D scanning technology, and large language models to revolutionize the hearing aid production process. The system addresses critical limitations in traditional hearing aid manufacturing, including discomfort during ear impression taking, long production times, poor fit, acoustic feedback issues, and limited personalization.
+이 프로젝트는 인공지능 기술을 활용하여 개인 맞춤형 보청기 제조 과정을 자동화 및 최적화하는 시스템입니다. 3D 스캐닝 기술과 딥러닝을 결합하여 정밀한 귀 형상 캡처부터 최적화된 보청기 설계까지의 전체 과정을 지원합니다.
 
-## System Architecture
+## 주요 기능
 
-The system consists of several integrated modules that work together to create a seamless manufacturing pipeline:
+- **고정밀 3D 스캐닝**: 귀 형상을 높은 정밀도로 스캔하는 하드웨어 인터페이스
+- **AI 기반 최적화**: 딥러닝 모델을 활용한 스캔 데이터 처리 및 최적화
+- **자동 보청기 설계**: 개인 맞춤형 보청기 쉘 및 내부 구성요소 자동 설계
+- **제조 자동화**: 3D 프린팅 및 조립 공정 자동화 인터페이스
 
-1. **3D Scanning Module (100)**: High-precision scanning of the ear canal without invasive ear impressions
-2. **AI Design Module (200)**: Automated, personalized hearing aid shell design using machine learning
-3. **3D Printing Module (300)**: Rapid prototyping of hearing aid shells with biocompatible materials
-4. **Acoustic Optimization Module (400)**: AI-driven acoustic simulation and performance optimization
-5. **IoT Monitoring Module (500)**: Real-time performance tracking and adjustment capabilities
-6. **Integration Control System (600)**: Central system coordinating all modules
-7. **LLM Integration Module (700)**: Advanced user interface with natural language processing
-8. **Rapid Fitting Module (800)**: Streamlined fitting process for immediate use
+## 시스템 구성
 
-## Key Innovations
+시스템은 다음과 같은 주요 모듈로 구성되어 있습니다:
 
-- **Non-invasive 3D Scanning**: Eliminates the discomfort and risks associated with traditional ear impressions
-- **AI-Driven Design**: Generates optimal hearing aid designs considering individual ear anatomy, hearing loss patterns, and lifestyle factors
-- **Rapid Manufacturing**: Reduces production time from weeks to hours using advanced 3D printing
-- **Acoustic Optimization**: Minimizes feedback and improves sound quality through sophisticated acoustic modeling
-- **Continuous Monitoring**: Enables real-time performance tracking and automatic adjustments
-- **Natural Language Interface**: Provides intuitive control through voice commands and natural conversation
-- **Cost-Effective Production**: Makes high-quality, customized hearing aids more accessible
+### 하드웨어 모듈
+- 3D 스캐너 드라이버 및 인터페이스
+- 3D 프린터 제어 시스템
+- 제조 자동화 장비 인터페이스
 
-## Implementation Guide
+### AI 모듈
+- 귀 형상 세그멘테이션 및 특징 추출 모델
+- 보청기 설계 최적화 알고리즘
+- 음향 시뮬레이션 모델
 
-This repository provides detailed implementation guides for each module, including hardware requirements, software architecture, algorithms, and integration protocols. The system is designed with modularity in mind, allowing for selective implementation of components based on specific needs and resources.
+### 소프트웨어 인프라
+- 사용자 인터페이스 및 워크플로우 관리
+- 데이터 관리 및 품질 보증 시스템
+- 생산 모니터링 및 분석 도구
 
-## Contents
+## 설치 및 실행
 
-- `/docs`: Comprehensive documentation of the system architecture and implementation details
-- `/src`: Source code for software components and algorithms
-- `/hardware`: Hardware specifications and integration guides
-- `/models`: Pre-trained AI models and training pipelines
-- `/examples`: Example implementations and case studies
-- `/tests`: Testing protocols and validation procedures
+### 요구사항
+- Python 3.8 이상
+- 필요 패키지: numpy, scikit-learn, pytorch 등
+- 스캐너 및 프린터 드라이버 
+- 데이터베이스 시스템 (PostgreSQL 권장)
 
-## Technology Stack
+### 설치 방법
 
-- **Programming Languages**: Python, C++, JavaScript
-- **AI Frameworks**: TensorFlow, PyTorch, scikit-learn
-- **3D Technologies**: OpenCV, Point Cloud Library, COMSOL Multiphysics
-- **IoT Platforms**: AWS IoT, MQTT, EdgeX Foundry
-- **LLM Technologies**: GPT-4 based natural language processing, speech recognition
-- **Hardware Components**: OCT probes, LiDAR sensors, microprocessor arrays, CLIP 3D printers
+```bash
+# 저장소 클론
+git clone https://github.com/JJshome/AI-3DScan-HearingAid-System.git
+cd AI-3DScan-HearingAid-System
 
-## Target Benefits
+# 가상환경 생성 및 활성화
+python -m venv venv
+source venv/bin/activate  # Windows: venv\Scripts\activate
 
-- 90% reduction in manufacturing time
-- Elimination of discomfort during ear impression taking
-- 95% improvement in fit comfort and acoustic performance
-- Significant reduction in acoustic feedback issues
-- Enhanced personalization based on user lifestyle and preferences
-- Intuitive user interface accessible to all age groups
-- Predictive maintenance and proactive adjustments
-- Cost reduction making quality hearing aids more accessible
+# 의존성 패키지 설치
+pip install -r requirements.txt
 
-## Getting Started
+# 환경 설정
+cp .env.example .env
+# .env 파일 편집하여 로컬 설정 조정
+```
 
-See the [Implementation Guide](docs/implementation_guide.md) for detailed instructions on how to get started with the system implementation.
+### 실행 방법
 
-## License
+```bash
+# 기본 모드로 시스템 실행
+python -m src.main --device scanner01
 
-This project is proprietary technology based on patent specifications. Implementation details are provided for educational and research purposes.
+# 고해상도 모드 실행 및 결과 저장
+python -m src.main --device scanner01 --high-res --output results/scan_001.json
 
-## Contributors
+# 도움말 표시
+python -m src.main --help
+```
 
-- Original Patent Inventors: Jang Ji-hwan, Choi Ji-young
-- Implementation Team: [Your Implementation Team]
+## 개발 가이드
 
-## References
+### 프로젝트 구조
 
-This implementation is based on the patent "Rapid Customized Hearing Aid Manufacturing System and Method Using Artificial Intelligence and 3D Scanning Technology."
+```
+.
+├── src/                # 소스 코드
+│   ├── hardware/       # 하드웨어 인터페이스 코드
+│   ├── ai/             # AI 모델 및 알고리즘
+│   ├── config/         # 설정 파일
+│   ├── utils/          # 유틸리티 함수
+│   └── main.py         # 메인 실행 파일
+├── models/             # 사전 훈련된 AI 모델
+├── data/               # 데이터 저장소
+├── tests/              # 테스트 코드
+└── docs/               # 문서화
+```
+
+### 개발 규칙
+
+- PEP 8 스타일 가이드 준수
+- 기능별 단위 테스트 작성
+- 변경사항에 대한 문서 업데이트
+- 브랜치 기반 개발 흐름 (feature/*, bugfix/*) 사용
+
+## 라이센스
+
+이 프로젝트는 MIT 라이센스 하에 배포됩니다. 자세한 내용은 LICENSE 파일을 참조하세요.
+
+## 기여
+
+프로젝트에 기여하고 싶으신 분들은 이슈를 제기하거나 풀 리퀘스트를 통해 참여하실 수 있습니다. 모든 기여는 코드 리뷰 과정을 거칩니다.
